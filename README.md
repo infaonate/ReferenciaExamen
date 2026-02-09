@@ -1,15 +1,10 @@
-# ReferenciaExamen
+# REFERENCIA RÁPIDA - ANDROID
+## Room + Fragment + RecyclerView + OSMDroid
 
-Aquí tienes la referencia que tendrás disponible durante el examen
+---
 
-
-                        REFERENCIA RÁPIDA - ANDROID
-                        Room + Fragment + RecyclerView + OSMDroid
-
---------------------------------------------------------------------------------
-ROOM - ENTITY
---------------------------------------------------------------------------------
-
+## ROOM - ENTITY
+```java
 @Entity(tableName = "nombre_tabla")
 public class MiEntidad {
 
@@ -20,12 +15,12 @@ public class MiEntidad {
 
     // Constructor, getters y setters
 }
+```
 
+---
 
---------------------------------------------------------------------------------
-ROOM - DAO
---------------------------------------------------------------------------------
-
+## ROOM - DAO
+```java
 @Dao
 public interface MiDao {
 
@@ -38,12 +33,12 @@ public interface MiDao {
     @Delete
     void eliminar(MiEntidad entidad);
 }
+```
 
+---
 
---------------------------------------------------------------------------------
-ROOM - DATABASE
---------------------------------------------------------------------------------
-
+## ROOM - DATABASE
+```java
 @Database(entities = {MiEntidad.class}, version = 1)
 public abstract class MiDatabase extends RoomDatabase {
 
@@ -62,12 +57,12 @@ public abstract class MiDatabase extends RoomDatabase {
         return instance;
     }
 }
+```
 
+---
 
---------------------------------------------------------------------------------
-FRAGMENT - ESTRUCTURA BÁSICA
---------------------------------------------------------------------------------
-
+## FRAGMENT - ESTRUCTURA BÁSICA
+```java
 public class MiFragment extends Fragment {
 
     @Override
@@ -81,12 +76,12 @@ public class MiFragment extends Fragment {
         return view;
     }
 }
+```
 
+---
 
---------------------------------------------------------------------------------
-RECYCLERVIEW - ADAPTER
---------------------------------------------------------------------------------
-
+## RECYCLERVIEW - ADAPTER
+```java
 public class MiAdapter extends RecyclerView.Adapter<MiAdapter.MiViewHolder> {
 
     private List<MiEntidad> datos;
@@ -125,35 +120,91 @@ public class MiAdapter extends RecyclerView.Adapter<MiAdapter.MiViewHolder> {
         notifyDataSetChanged();
     }
 }
+```
 
+---
 
---------------------------------------------------------------------------------
-OSMDROID - MAPA BÁSICO
---------------------------------------------------------------------------------
+## RECYCLERVIEW - ONCLICK EN VIEWHOLDER
+```java
+// Dentro del ViewHolder
+public void onClick(View v) {
+    int posicion = getAbsoluteAdapterPosition();
+    if (posicion != RecyclerView.NO_POSITION && listener != null) {
+        listener.onItemClick(datos.get(posicion));
+    }
+}
+```
 
+---
+
+## NAVEGACIÓN FRAGMENT ↔ ACTIVITY
+```java
+// Llamar a método de Activity desde Fragment
+((MainActivity) getActivity()).metodoActivity();
+
+// Reemplazar Fragment desde Activity
+getSupportFragmentManager()
+    .beginTransaction()
+    .replace(R.id.contenedor, new MiFragment())
+    .addToBackStack(null)
+    .commit();
+```
+
+---
+
+## ALERTDIALOG
+```java
+new AlertDialog.Builder(context)
+    .setTitle("Título")
+    .setMessage("Mensaje")
+    .setPositiveButton("Sí", (dialog, which) -> {
+        // Acción positiva
+    })
+    .setNegativeButton("No", null)
+    .show();
+```
+
+---
+
+## OSMDROID - MAPA BÁSICO
+```java
 // En onCreate o onCreateView
 Configuration.getInstance().load(context, 
     PreferenceManager.getDefaultSharedPreferences(context));
 
+MapView mapView = view.findViewById(R.id.mapView);
+mapView.setMultiTouchControls(true);
 
---------------------------------------------------------------------------------
-OSMDROID - MARCADORES
---------------------------------------------------------------------------------
+// Centrar el mapa
+IMapController mapController = mapView.getController();
+mapController.setZoom(15.0);
+GeoPoint startPoint = new GeoPoint(43.2630, -2.9350);  // Bilbao
+mapController.setCenter(startPoint);
+```
 
+---
+
+## OSMDROID - MARCADORES
+```java
 // Añadir un marcador
 Marker marker = new Marker(mapView);
-
-//Mostrar un marcador
+marker.setPosition(new GeoPoint(latitud, longitud));
+marker.setTitle("Título del marcador");
+marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 mapView.getOverlays().add(marker);
-//Refrescar el mapa
 mapView.invalidate();
 
+// Listener de click en el marcador
+marker.setOnMarkerClickListener((m, mapView) -> {
+    // Acción al hacer click
+    return true;
+});
+```
 
+---
 
---------------------------------------------------------------------------------
-RADIOGROUP
---------------------------------------------------------------------------------
-
+## RADIOGROUP
+```java
 RadioGroup radioGroup = view.findViewById(R.id.miRadioGroup);
 int seleccionadoId = radioGroup.getCheckedRadioButtonId();
 
@@ -164,12 +215,12 @@ if (seleccionadoId == -1) {
 if (seleccionadoId == R.id.opcion1) {
     // Opción 1 seleccionada
 }
+```
 
+---
 
---------------------------------------------------------------------------------
-FORMATO DE NÚMEROS Y FECHAS
---------------------------------------------------------------------------------
-
+## FORMATO DE NÚMEROS Y FECHAS
+```java
 // Formatear números con decimales
 DecimalFormat formato = new DecimalFormat("#,##0.00");
 String importeFormateado = formato.format(25.5);  // "25,50"
@@ -182,6 +233,8 @@ String fechaFormateada = formatoFecha.format(fecha);
 
 // Obtener timestamp actual
 long ahora = System.currentTimeMillis();
+```
 
 ---
-                               FIN DE REFERENCIA
+
+**FIN DE REFERENCIA**
